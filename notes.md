@@ -62,6 +62,22 @@ describe("series of tests", () => {
 
 - Through `cy.`, we can interact with the lements
   - `cy.visit('/')`: navigates the cypress runner to the home page
+  - Cy object is globally available, we don't need to import it
+
+#### Interaction commands
+
+```js
+.click()
+.dblclick()
+.rightclick()
+.type()
+.clear()
+.check()
+.uncheck()
+.select()
+.trigger()
+.selectFile()
+```
 
 #### Core commands
 
