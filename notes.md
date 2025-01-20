@@ -1,246 +1,243 @@
-# Cypress
+### **Cypress Cheat Sheet**
 
-- An all-in-one testing framework, assertion library
+#### **Table of Contents**
 
-## Why Cypress
+1. Cypress Overview
+2. Why Cypress
+3. First Steps
+4. Fundamentals
+   - 4.1 Describe Block
+   - 4.2 It Block
+   - 4.3 Commands and Interacting with Elements
+5. Assertions with Should
+6. Test Runner
+7. Fixtures
+8. Network Requests
+9. Timeouts
+10. Browser Control
+11. CLI Commands
+12. Best Practices
 
-- Focus on E2E and Component testing -- real world testing
-- Runs in the browser and wrote in JS
-- Good performance and can be integrated in CI/CD quite easily
-- Native access to the DOM and to your app
-- Great developer UX
+- 12.1 Avoid Variables
+- 12.2 Use Test IDs for Selectors
+- 12.3 Avoid Hardcoding URLs
+- 12.4 Create Custom Commands
+- 12.5 Avoid `.then()` Nesting
 
-## First steps
+---
+
+### 1. **Cypress Overview**
+
+- An all-in-one testing framework and assertion library.
+
+---
+
+### 2. **Why Cypress**
+
+- Focuses on E2E and component testing (real-world testing).
+- Runs in the browser and is written in JS.
+- Offers good performance and easy CI/CD integration.
+- Provides native access to the DOM and your app.
+- Delivers a great developer UX.
+
+---
+
+### 3. **First Steps**
 
 1. Installation: `npm install cypress --save-dev`
-2. Configuration
+2. Configuration:
+   ```bash
+   npx cypress open # it will run the Cypress interface
+   # click E2E testing > chrome > create new spec
+   ```
+   - Cypress organizes tests in spec files under the `cypress/e2e` directory.
+
+---
+
+### 4. **Fundamentals**
+
+#### 4.1 **Describe Block**
+
+- Tests exist in a `describe` block, which takes two arguments:
+  - A description of what you're testing.
+  - A callback function containing your test logic.
+  ```js
+  describe("Test Suite", () => {
+    it("Test case", () => {
+      // test logic
+    });
+  });
+  ```
+
+#### 4.2 **It Block**
+
+- Within the `describe` block, use an `it` block for individual tests. It takes two arguments:
+
+  - A title describing the test case.
+  - A callback function for the test logic.
+
+  ```js
+  describe("series of tests", () => {
+    it("checks thing 1", () => {
+      // function to check thing 1
+    });
+
+    it("checks thing 2", () => {
+      // function to check thing 2
+    });
+  });
+  ```
+
+#### 4.3 **Commands and Interacting with Elements**
+
+- The `cy` object allows interaction with elements and is globally available (no import required).
+  - Example commands:
+    ```js
+    cy.visit("/"); // navigates to the home page
+    cy.get("button").click(); // clicks a button
+    ```
+- Interaction commands:
+  ```js
+  .click()
+  .dblclick()
+  .rightclick()
+  .type()
+  .clear()
+  .check()
+  .uncheck()
+  .select()
+  .trigger()
+  .selectFile()
+  ```
+
+---
+
+### 5. **Assertions with Should**
+
+- Use `.should()` for validation and assertions:
+  ```js
+  cy.get("button").should("be.visible");
+  ```
+- Common assertions:
+  - `should('be.visible')`
+  - `should('have.class', 'class-name')`
+  - `should('have.text', 'Submit')`
+  - `should('include.text', 'partial text')`
+
+---
+
+### 6. **Test Runner**
+
+- Cypress provides a GUI test runner for running and debugging tests in real-time:
+  ```bash
+  npx cypress run
+  ```
+
+---
+
+### 7. **Fixtures**
+
+- Store mock data in the `cypress/fixtures` directory and use it with `cy.fixture()`:
+  ```js
+  cy.fixture("data.json").then((data) => {
+    cy.get("input").type(data.name);
+  });
+  ```
+
+---
+
+### 8. **Network Requests**
+
+- Intercept and stub requests with `cy.intercept()`:
+  ```js
+  cy.intercept("GET", "/api/resource", { fixture: "data.json" });
+  ```
+
+---
+
+### 9. **Timeouts**
+
+- Cypress automatically waits for commands and assertions to resolve. You can adjust timeouts if needed:
+  ```js
+  cy.get("button", { timeout: 1000 }).should("be.visible");
+  ```
+
+---
+
+### 10. **Browser Control**
+
+- Run tests in different browsers:
+  ```bash
+  npx cypress open --browser chrome
+  ```
+
+---
+
+### 11. **CLI Commands**
 
 ```bash
-npx cypress open # it will run cypress interface
-# click E2E testing > chrome > create new spec
+npx cypress run # Runs tests in headless mode with the default browser (Electron).
+npx cypress run --browser chrome # Runs tests in headless mode using Chrome.
+npx cypress open # Opens Cypress test runner.
+npx cypress open --browser chrome # Opens the test runner with Chrome.
+npx cypress run --spec "cypress/e2e/my-spec.cy.ts" # Runs a specific spec file.
+npx cypress run --env ENV_NAME=value # Sets a custom .env for tests.
+npx cypress run --config baseUrl=http://localhost:3000,viewportWidth=1280 # Runs tests with specific config.
 ```
 
-- Cypress organizes tests in spec files under the cypress/e2e directory
+---
 
-## Fundamentals
+### 12. **Best Practices**
 
-### Describe block
+#### 12.1 **Avoid Variables**
 
-- Tests exist in a describe block
-- This block takes two arguments
-
-  - 1st: description of what you're testing
-  - 2nd: callback func for your test
-
-```js
-describe("Test Suite", () => {
-  it("Test case", () => {
-    // test logic
+- Cypress commands are asynchronous and use a chainable API. Avoid storing them in variables and use chaining or `.then()` instead:
+  ```js
+  cy.get("button").then(($btn) => {
+    const cls = $btn.attr("class");
   });
-});
-```
+  ```
 
-### It block
+#### 12.2 **Use Test IDs for Selectors**
 
-- Within the describe block, we also add an 'it' block
-- It blocks will be single tests within an overall test file
-- Same API as describe: takes two args(test_title, cb_func)
+- Use `[data-testid]` attributes for element selectors:
+  ```html
+  <div data-testid="example" />
+  ; cy.get('[data-testid="example"]').should("be.visible");
+  ```
 
-```js
-describe("series of tests", () => {
-  it("checks thing 1", () => {
-    // function to check thing 1
+#### 12.3 **Avoid Hardcoding URLs**
+
+- Use `baseUrl` in `cypress.config.js` for centralized URL management:
+  ```js
+  module.exports = {
+    e2e: {
+      baseUrl: "http://localhost:3000",
+    },
+  };
+  ```
+
+#### 12.4 **Create Custom Commands**
+
+- Define reusable custom commands in `cypress/support/commands.js`:
+  ```js
+  Cypress.Commands.add("login", (username, password) => {
+    cy.get('input[name="username"]').type(username);
+    cy.get('input[name="password"]').type(password);
+    cy.get('button[type="submit"]').click();
+  });
+  ```
+
+#### 12.5 **Avoid `.then()` Nesting**
+
+- Prefer chaining commands over deeply nested `.then()` blocks:
+
+  ```js
+  // ❌ Avoid
+  cy.get("button").then(($btn) => {
+    cy.wrap($btn).click();
   });
 
-  it("checks thing 2", () => {
-    // function to check thing 2
-  });
-});
-```
-
-### Commands and interacting with elements
-
-- Through `cy.`, we can interact with the lements
-  - `cy.visit('/')`: navigates the cypress runner to the home page
-  - Cy object is globally available, we don't need to import it
-
-#### Interaction commands
-
-```js
-.click()
-.dblclick()
-.rightclick()
-.type()
-.clear()
-.check()
-.uncheck()
-.select()
-.trigger()
-.selectFile()
-```
-
-#### Core commands
-
-- Visit pages: `cy.visit('/url')`
-- Query elements: `cy.get(selector)`
-- Assertions: use `.should()` for validations
-
-```js
-cy.get("button").should("be.visible");
-```
-
-- Actions: simulate user actions like click, type, etc.
-
-```js
-cy.get("input").type("Hello");
-cy.get("button").click();
-```
-
-### Assertions with should
-
-#### 1. Visibility/Existence
-
-####
-
-#### Assertions
-
-- Cypress includes built-in [Chai assertions](https://www.chaijs.com/)
-
-```js
-cy.url().should("include", "/dashboard");
-cu.get("input").should("have.value", "Hello");
-```
-
-### Test runner
-
-- Cypress provides a GUI test runner to run and debug tests in real-time
-
-```
-npx cypress run
-```
-
-### Fixtures
-
-- Store mock data in `cypress/fixtures` and use it with cy.fixture()
-
-```js
-cy.fixture("data.json").then((data) => {
-  cy.get("input").type(data.name);
-});
-```
-
-### Network requests
-
-- Intercept and stub requests wity `cy.intercept()`
-
-```js
-cy.intercept("GET", "/api/resource", { fixture: "data.json" });
-```
-
-### Timeouts
-
-- Cypress automatically waits for commands and assertions to resolve
-- Adjust timeouts if needed
-
-```js
-cy.get("button", { timeout: 1000 }).should("be.visible");
-```
-
-### Browser control
-
-- Run tests in different browsers
-
-```bash
-npx cypress open --browser chrome
-```
-
-### CLI Commands
-
-```bash
-npx cypress run # runs tests in headless mode. Uses default browser (typically Electron)
-npx cypress run --browser chrome # runs tests in specific browser
-
-npx cypress open # opens Cypress test runner
-npx cypress open --browser chrome # # opens test runner with specific browser
-
-npx cypress run --spec "cypress/e2e/my-spec.cy.ts" # runs specific spec file
-npx cypress run --env ENV_NAME=value # sets a custom .env for tests
-npx cypress run --config baseUrl=http://localhost:3000,viewportWidth=1280 # runs tests with specific config
-```
-
-## Best practices
-
-### 1. Avoid variables, use chain commands or .then()
-
-- In Cypress. commands like `cy.get()` are async and DO NOT directly return DOM elements. Instead Cypress uses a `chainable API`.
-- This design eliminates race conditions, but it means we can't store Cypress commands in variables. Instead, we must chain commands or use `.then()`
-- **Instead of storing variables, chain commands**
-- Cypress commands DO NOT return their subjects. This means you can't do stuff like this:
-
-```js
-const button = cy.get("button");
-button.click();
-```
-
-- This is one of the primary reasons why it's recommended avoid using variables within the tests
-- Instead, we can use `.then()`. This is a Cypress command, not a promise
-- This means we can't use async/await within Cypress tests
-
-```js
-cy.get("button").then(($btn) => {
-  const cls = $btn.attr("class");
-
-  //...
-});
-```
-
-### 2. Use Test IDs for selectors
-
-- use [data-testid] for selectors to avoid coupling tests to implementation details (class names and ids may change)
-
-```js
-<div data-testid="example" />;
-
-cy.get('[data-testid="example"]').should("be.visible");
-```
-
-### 3. Avoid hardcoding URLs
-
-- Use `baseYrl` in the cypress.config.js` for centralized and consistent URL handling
-
-```js
-// cypress.config.js
-
-module.exports = {
-  e2e: {
-    baseUrl: "http://localhost:3000",
-  },
-};
-```
-
-### 4. Create custom commands
-
-- Create reusable custom commands for common interactions
-
-```js
-// cypress/support/commands.ts
-Cypress.commands.add("login", (username, password) => {
-  cy.get('input[name="username"]').type(username);
-  cy.get('input[name="password"]').type(password);
-  cy.get('button[type="submit"]').click();
-});
-```
-
-### 5. Avoid .then() nesting
-
-- Chain commands when possible to avoid deeply nested `.then()` blocks
-
-```js
-// ❌ instead of this:
-cy.get("button").then(($btn) => {
-  cy.wrap($btn).click();
-});
-
-// ✅ do this
-cy.get("button").click();
-```
+  // ✅ Use chaining
+  cy.get("button").click();
+  ```
