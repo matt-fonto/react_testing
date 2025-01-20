@@ -96,6 +96,12 @@ cy.get("input").type("Hello");
 cy.get("button").click();
 ```
 
+### Assertions with should
+
+#### 1. Visibility/Existence
+
+####
+
 #### Assertions
 
 - Cypress includes built-in [Chai assertions](https://www.chaijs.com/)
@@ -164,6 +170,8 @@ npx cypress run --config baseUrl=http://localhost:3000,viewportWidth=1280 # runs
 
 ## Best practices
 
+### 1. Avoid variables, use chain commands or .then()
+
 - In Cypress. commands like `cy.get()` are async and DO NOT directly return DOM elements. Instead Cypress uses a `chainable API`.
 - This design eliminates race conditions, but it means we can't store Cypress commands in variables. Instead, we must chain commands or use `.then()`
 - **Instead of storing variables, chain commands**
@@ -184,4 +192,55 @@ cy.get("button").then(($btn) => {
 
   //...
 });
+```
+
+### 2. Use Test IDs for selectors
+
+- use [data-testid] for selectors to avoid coupling tests to implementation details (class names and ids may change)
+
+```js
+<div data-testid="example" />;
+
+cy.get('[data-testid="example"]').should("be.visible");
+```
+
+### 3. Avoid hardcoding URLs
+
+- Use `baseYrl` in the cypress.config.js` for centralized and consistent URL handling
+
+```js
+// cypress.config.js
+
+module.exports = {
+  e2e: {
+    baseUrl: "http://localhost:3000",
+  },
+};
+```
+
+### 4. Create custom commands
+
+- Create reusable custom commands for common interactions
+
+```js
+// cypress/support/commands.ts
+Cypress.commands.add("login", (username, password) => {
+  cy.get('input[name="username"]').type(username);
+  cy.get('input[name="password"]').type(password);
+  cy.get('button[type="submit"]').click();
+});
+```
+
+### 5. Avoid .then() nesting
+
+- Chain commands when possible to avoid deeply nested `.then()` blocks
+
+```js
+// ❌ instead of this:
+cy.get("button").then(($btn) => {
+  cy.wrap($btn).click();
+});
+
+// ✅ do this
+cy.get("button").click();
 ```

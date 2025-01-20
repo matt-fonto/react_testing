@@ -2,7 +2,7 @@ import { getDataTestId } from "../utils/getDataTestId";
 
 describe("Home page tests", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000");
+    cy.visit("/");
   });
 
   it("container should render as a grid", () => {
@@ -27,8 +27,6 @@ describe("Home page tests", () => {
   });
 
   it("heading should say hello", () => {
-    cy.visit("http://localhost:3000");
-
     cy.get("[data-testid=heading-home-page]")
       .should("be.visible")
       .should("contain.text", "Hello");
