@@ -147,3 +147,41 @@ cy.get("button", { timeout: 1000 }).should("be.visible");
 ```bash
 npx cypress open --browser chrome
 ```
+
+### CLI Commands
+
+```bash
+npx cypress run # runs tests in headless mode. Uses default browser (typically Electron)
+npx cypress run --browser chrome # runs tests in specific browser
+
+npx cypress open # opens Cypress test runner
+npx cypress open --browser chrome # # opens test runner with specific browser
+
+npx cypress run --spec "cypress/e2e/my-spec.cy.ts" # runs specific spec file
+npx cypress run --env ENV_NAME=value # sets a custom .env for tests
+npx cypress run --config baseUrl=http://localhost:3000,viewportWidth=1280 # runs tests with specific config
+```
+
+## Best practices
+
+- In Cypress. commands like `cy.get()` are async and DO NOT directly return DOM elements. Instead Cypress uses a `chainable API`.
+- This design eliminates race conditions, but it means we can't store Cypress commands in variables. Instead, we must chain commands or use `.then()`
+- **Instead of storing variables, chain commands**
+- Cypress commands DO NOT return their subjects. This means you can't do stuff like this:
+
+```js
+const button = cy.get("button");
+button.click();
+```
+
+- This is one of the primary reasons why it's recommended avoid using variables within the tests
+- Instead, we can use `.then()`. This is a Cypress command, not a promise
+- This means we can't use async/await within Cypress tests
+
+```js
+cy.get("button").then(($btn) => {
+  const cls = $btn.attr("class");
+
+  //...
+});
+```
