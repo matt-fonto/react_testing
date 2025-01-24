@@ -9,6 +9,7 @@
    - 4.1 Describe Block
    - 4.2 It Block
    - 4.3 Commands and Interacting with Elements
+   - 4.4 Chaining commands
 5. Assertions with Should
 6. Test Runner
 7. Fixtures
@@ -110,19 +111,93 @@
   .selectFile()
   ```
 
+#### 4.4 **Chaining commands**
+
+- Adding a chained command after cy.get().`command()`
+
+```js
+cy.get("button").click();
+cy.get('input[name="email"]').type("hello world");
+cy.get('input[type="checkbox"]').check();
+```
+
 ---
 
 ### 5. **Assertions with Should**
 
+<!-- To continue: video notes chatgpt and video 27:52  -->
+
 - Use `.should()` for validation and assertions:
+
   ```js
   cy.get("button").should("be.visible");
   ```
+
 - Common assertions:
   - `should('be.visible')`
   - `should('have.class', 'class-name')`
   - `should('have.text', 'Submit')`
   - `should('include.text', 'partial text')`
+
+#### Visibility/existence
+
+should('...')
+
+- be.visible
+- not.be.visible
+- exist
+- not.exist
+
+#### Classes
+
+should('...')
+
+- 'have.class', 'class-name'
+- 'not.have.class', 'class-name'
+
+#### Attributes
+
+should('...')
+
+- 'have.attr', 'attribute', 'value'
+- 'have.attr', 'attribute'
+
+#### Text content
+
+should('...')
+
+- 'have.text', 'exact text'
+- 'include.text', 'partial text'
+
+#### Value (for inputs)
+
+should('...')
+
+- 'have.value', 'value'
+- 'not.have.value', 'value'
+
+#### CSS properties
+
+should('...')
+
+- 'have.css', 'property', 'value'
+- 'not.have.css', 'property', 'value'
+
+#### State
+
+should('...')
+
+- 'be.enabled'
+- 'be.disabled'
+- 'be.checked'
+- 'not.be.checked'
+
+#### Containment
+
+should ('...')
+
+- 'contain', 'text'
+- 'not.contain', 'text'
 
 ---
 
@@ -192,6 +267,7 @@ npx cypress run --config baseUrl=http://localhost:3000,viewportWidth=1280 # Runs
 #### 12.1 **Avoid Variables**
 
 - Cypress commands are asynchronous and use a chainable API. Avoid storing them in variables and use chaining or `.then()` instead:
+
   ```js
   cy.get("button").then(($btn) => {
     const cls = $btn.attr("class");
