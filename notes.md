@@ -98,6 +98,7 @@
     cy.get("button").click(); // clicks a button
     ```
 - Interaction commands:
+
   ```js
   .click()
   .dblclick()
@@ -111,8 +112,16 @@
   .selectFile()
   ```
 
+- We often want to get elements from the DOM and make some assertion about it
+- We can also use `.pause()`
+
+```js
+cy.get("css-selector");
+```
+
 #### 4.4 **Chaining commands**
 
+- After getting an element `cy.get('element)`, we can do something with it. We can do this by chaining a command after it. `cy.get('element').should('be.visible')`
 - Adding a chained command after cy.get().`command()`
 
 ```js
@@ -121,11 +130,43 @@ cy.get('input[name="email"]').type("hello world");
 cy.get('input[type="checkbox"]').check();
 ```
 
+#### 4.5 **Chai assertion framework**
+
+- It's one of the assertion systems that cypress uses under the hook
+- It says: `BDD / TDD assertion framework for node.js and the browser that can be paired with any testing framework.`
+- [Chai Github](https://github.com/chaijs/chai)
+
+#### 4.6 **Data Test ID**
+
+- A way to separate the implementation details of your application to the test features of it. The best way to identify your elements
+
+```js
+cy.get('[data-testid="element-id"]').should("exist");
+```
+
 ---
 
 ### 5. **Assertions with Should**
 
-<!-- To continue: video notes chatgpt and video 27:52  -->
+### Most common assertions
+
+```bash
+cy.get(selector).should("...");
+
+// visibility
+- "be.visible";
+- "not.be.visible"
+- "exist"
+- "not.exist"
+- 'have.length', [number-expected]
+
+// text
+- 'have.text', 'expected text'
+- 'include.text', 'partial text'
+- 'not.contain', 'unexpected text'
+```
+
+#### More detailed list:
 
 - Use `.should()` for validation and assertions:
 

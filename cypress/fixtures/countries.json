@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Austria",
+    "capital": "Vienna",
+    "population": "8.9 million",
+    "currency": "Euro"
+  },
+  {
+    "name": "Italy",
+    "capital": "Rome",
+    "population": "60.4 million",
+    "currency": "Euro"
+  },
+  {
+    "name": "Germany",
+    "capital": "Berlin",
+    "population": "83.2 million",
+    "currency": "Euro"
+  },
+  {
+    "name": "USA",
+    "capital": "Washington D.C.",
+    "population": "331 million",
+    "currency": "US Dollar"
+  },
+  {
+    "name": "Brazil",
+    "capital": "Brasília",
+    "population": "212 million",
+    "currency": "Brazilian Real"
+  }
+]
