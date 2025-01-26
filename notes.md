@@ -10,20 +10,10 @@
    - 4.2 It Block
    - 4.3 Commands and Interacting with Elements
    - 4.4 Chaining commands
-5. Assertions with Should
-6. Test Runner
-7. Fixtures
-8. Network Requests
-9. Timeouts
-10. Browser Control
-11. CLI Commands
-12. Best Practices
-
-- 12.1 Avoid Variables
-- 12.2 Use Test IDs for Selectors
-- 12.3 Avoid Hardcoding URLs
-- 12.4 Create Custom Commands
-- 12.5 Avoid `.then()` Nesting
+   - 4.5 Chai assertion framework
+   - 4.6 Data Test ID
+   - 4.7 beforeEach
+   - 4.8 Custom Commands
 
 ---
 
@@ -89,6 +79,21 @@
   });
   ```
 
+- If we want to focus on that specific test, ignoring all the others, we should use `it.only()`
+
+```js
+describe("series of tests", () => {
+  // it will only run this test
+  it.only("checks thing 1", () => {
+    // function to check thing 1
+  });
+
+  it("checks thing 2", () => {
+    // function to check thing 2
+  });
+});
+```
+
 #### 4.3 **Commands and Interacting with Elements**
 
 - The `cy` object allows interaction with elements and is globally available (no import required).
@@ -143,6 +148,66 @@ cy.get('input[type="checkbox"]').check();
 ```js
 cy.get('[data-testid="element-id"]').should("exist");
 ```
+
+#### 4.7 **beforeEach**
+
+- You can set up a instruction to run before each test through `beforeEach()`
+
+```js
+describe("test cool stuff", () => {
+  beforeEach(() => {
+    // visit home page
+    // set up some stuff
+  });
+
+  it("test the first thing", () => {
+    // testing
+  });
+});
+```
+
+#### 4.8 **Custom Commands**
+
+- We aren't limited to `cy.X` commands. We can create our own custom ones.
+- Add them to `cypress/support/commands/ts`
+
+##### Common custom commands
+
+- You can use `Cypress.Commands.add("customCommand")`, then you will be able to do `cy.customCommand()`
+
+1. Get test id
+
+```js
+Cypress.Commands.add("getByTestId", (testId: string) => {
+  return cy.get(`[data-testid="${testId}"]`);
+});
+
+cy.getByTestId(selector).should("be.visible");
+```
+
+2. Login: if the app requires auth, abstract the login logic
+
+```js
+Cypress.Commands.add("login", (username: string, password: string) => {
+  cy.request("POST", "/api/auth/login", {
+    username,
+    password,
+  }).then((res) => {
+    window.localStorage.setItem("authToken", response.body.token);
+  });
+});
+
+cy.login("testuser", "password123");
+cy.visit("/dashboard");
+```
+
+Other possiibilities:
+
+- Form filling
+- API validation
+- Drag and drop
+- File upload
+- Logout
 
 ---
 

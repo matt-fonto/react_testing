@@ -44,6 +44,8 @@ export default function Home() {
       data-testid="container-home-page"
       className="container mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
     >
+      <h2 data-testid="heading-countries">Countries</h2>
+
       {countries.map((country) => (
         <CountryCard key={country.name} country={country} />
       ))}
