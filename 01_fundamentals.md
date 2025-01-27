@@ -38,6 +38,7 @@
     - 12.3 Avoid hardcoding URLS
     - 12.4 Create custom commands
     - 12.5 Avoid .then nesting
+13. Multi-page testing
 
 ---
 
@@ -457,3 +458,12 @@ npx cypress run --config baseUrl=http://localhost:3000,viewportWidth=1280 # Runs
   // ✅ Use chaining
   cy.get("button").click();
   ```
+
+### 13. **Multi-page testing**
+
+- To navigate, we can use:
+
+  - 1.  Click a button
+  - 2.  `cy.visit()`
+
+- To assert we're at the right location, we can use: `cy.location("pathname").should("equal", "some-path")`
