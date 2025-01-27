@@ -14,6 +14,30 @@
    - 4.6 Data Test ID
    - 4.7 beforeEach
    - 4.8 Custom Commands
+   - 4.9 Cypress aliases
+5. Assertions with 'should'
+   - 5.1 Most common assertions
+   - 5.2 More detailed list
+   - 5.3 Visibility/existence
+   - 5.4 Classes
+   - 5.5 Attributes
+   - 5.6 Text content
+   - 5.7 Value (for inputs)
+   - 5.8 CSS properties
+   - 5.9 State
+   - 5.10 Containment
+6. Test runner
+7. Fixtures
+8. Network requests
+9. Timeouts
+10. Browser control
+11. CLI Commands
+12. Best practices
+    - 12.1 Avoid variables
+    - 12.2 Use Test IDs for selectors
+    - 12.3 Avoid hardcoding URLS
+    - 12.4 Create custom commands
+    - 12.5 Avoid .then nesting
 
 ---
 
@@ -213,7 +237,7 @@ Other possiibilities:
 
 ### 5. **Assertions with Should**
 
-### Most common assertions
+### 5.1 Most common assertions
 
 ```bash
 cy.get(selector).should("...");
@@ -231,7 +255,7 @@ cy.get(selector).should("...");
 - 'not.contain', 'unexpected text'
 ```
 
-#### More detailed list:
+#### 5.2 More detailed list:
 
 - Use `.should()` for validation and assertions:
 
@@ -245,7 +269,7 @@ cy.get(selector).should("...");
   - `should('have.text', 'Submit')`
   - `should('include.text', 'partial text')`
 
-#### Visibility/existence
+#### 5.3 Visibility/existence
 
 should('...')
 
@@ -254,42 +278,42 @@ should('...')
 - exist
 - not.exist
 
-#### Classes
+#### 5.4 Classes
 
 should('...')
 
 - 'have.class', 'class-name'
 - 'not.have.class', 'class-name'
 
-#### Attributes
+#### 5.5 Attributes
 
 should('...')
 
 - 'have.attr', 'attribute', 'value'
 - 'have.attr', 'attribute'
 
-#### Text content
+#### 5.6 Text content
 
 should('...')
 
 - 'have.text', 'exact text'
 - 'include.text', 'partial text'
 
-#### Value (for inputs)
+#### 5.7 Value (for inputs)
 
 should('...')
 
 - 'have.value', 'value'
 - 'not.have.value', 'value'
 
-#### CSS properties
+#### 5.8 CSS properties
 
 should('...')
 
 - 'have.css', 'property', 'value'
 - 'not.have.css', 'property', 'value'
 
-#### State
+#### 5.9 State
 
 should('...')
 
@@ -298,7 +322,7 @@ should('...')
 - 'be.checked'
 - 'not.be.checked'
 
-#### Containment
+#### 5.10 Containment
 
 should ('...')
 
