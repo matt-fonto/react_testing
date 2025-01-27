@@ -195,6 +195,16 @@ describe("test cool stuff", () => {
 - We aren't limited to `cy.X` commands. We can create our own custom ones.
 - Add them to `cypress/support/commands/ts`
 
+#### 4.9 **Cypress aliases**
+
+- Used to store references to elements, requests, or other reusable data, what makes it easier to interact with them later in the tests.
+- Defined using `as()` and accessed through `@`
+
+```js
+cy.get(".button-submit").as("submitButton");
+cy.get("@submitButton").click();
+```
+
 ##### Common custom commands
 
 - You can use `Cypress.Commands.add("customCommand")`, then you will be able to do `cy.customCommand()`

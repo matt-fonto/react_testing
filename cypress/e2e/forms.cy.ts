@@ -1,31 +1,33 @@
 describe("Form tests", () => {
   beforeEach(() => {
     cy.visit("/forms");
+    cy.getDataTestId("form").as("form");
+    cy.getDataTestId("input-name").as("inputName");
+    cy.getDataTestId("input-email").as("inputEmail");
+    cy.getDataTestId("button-submit").as("submitButton");
   });
 
   it("renders the form with all fields and the submit button", () => {
-    cy.getDataTestId("form").should("exist");
-    cy.getDataTestId("input-name").should("exist");
-    cy.getDataTestId("input-email").should("exist");
-    cy.getDataTestId("button-submit").should("exist");
+    cy.get("@form").should("exist");
+    cy.get("@inputName").should("exist");
+    cy.get("@inputEmail").should("exist");
+    cy.get("@submitButton").should("exist");
   });
 
   it("should allow typing into the name and email fields", () => {
-    cy.getDataTestId("input-name")
-      .type("John Doe")
-      .should("have.value", "John Doe");
-    cy.getDataTestId("input-email")
+    cy.get("@inputName").type("John Doe").should("have.value", "John Doe");
+    cy.get("@inputEmail")
       .type("john.doe@example.com")
       .should("have.value", "john.doe@example.com");
   });
 
   // happy path
   it("should submit the form with valid data", () => {
-    cy.getDataTestId("input-name").type("John Doe");
-    cy.getDataTestId("input-email").type("john.doe@example.com");
+    cy.get("@inputName").type("John Doe");
+    cy.get("@inputEmail").type("john.doe@example.com");
     cy.getDataTestId("success-message").should("not.exist");
 
-    cy.getDataTestId("button-submit").click();
+    cy.get("@submitButton").click();
 
     cy.getDataTestId("success-message").should("exist");
     cy.getDataTestId("success-message").contains(
@@ -37,16 +39,16 @@ describe("Form tests", () => {
 
   // sad path
   it("should not submit the form without name", () => {
-    cy.getDataTestId("input-email").type("john.doe@example.com");
-    cy.getDataTestId("button-submit").click();
+    cy.get("@inputEmail").type("john.doe@example.com");
+    cy.get("@submitButton").click();
 
     cy.getDataTestId("error-name").should("exist");
     cy.getDataTestId("success-message").should("not.exist");
   });
 
   it("should not submit the form without email", () => {
-    cy.getDataTestId("input-name").type("John Doe");
-    cy.getDataTestId("button-submit").click();
+    cy.get("@inputName").type("John Doe");
+    cy.get("@submitButton").click();
 
     cy.getDataTestId("error-email").should("exist");
     cy.getDataTestId("success-message").should("not.exist");
