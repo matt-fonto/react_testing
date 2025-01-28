@@ -39,6 +39,7 @@
     - 12.4 Create custom commands
     - 12.5 Avoid .then nesting
 13. Multi-page testing
+14. Useful methods
 
 ---
 
@@ -516,3 +517,16 @@ npx cypress run --config baseUrl=http://localhost:3000,viewportWidth=1280 # Runs
   - 2.  `cy.visit()`
 
 - To assert we're at the right location, we can use: `cy.location("pathname").should("equal", "some-path")`
+
+### 14. **Useful methods**
+
+- `.its()`: get the index of an array or an object property
+
+```js
+cy.wrap(["Mateus", "Fontoura"]).its(1).should("eq", "Fontoura");
+cy.wrap({ firstName: "Mateus", lastName: "Fontoura" })
+  .its("lastName")
+  .should("eq", "Fontoura");
+```
+
+- `.within()`: scopes all subsequent Cypress commands to within an element. Useful for working with a group of elements and we want to drill down on the children
