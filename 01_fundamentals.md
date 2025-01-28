@@ -40,6 +40,7 @@
     - 12.5 Avoid .then nesting
 13. Multi-page testing
 14. Useful methods
+15. Component testing
 
 ---
 
@@ -530,3 +531,30 @@ cy.wrap({ firstName: "Mateus", lastName: "Fontoura" })
 ```
 
 - `.within()`: scopes all subsequent Cypress commands to within an element. Useful for working with a group of elements and we want to drill down on the children
+
+### 15. **Component Testing**
+
+- Allows us to test individual UI components in isolation
+- Component testing is added to `cypress/component`
+
+```
+npx cypress open --component
+```
+
+```jsx
+// Button.jsx
+import React from "react";
+
+export const Button = ({ label, onClick }) => (
+  <button data-testid="custom-button" onClick={onClick}>
+    {label}
+  </button>
+);
+```
+
+```js
+// Button.cy.js
+describe("button component", () => {
+  //
+});
+```
