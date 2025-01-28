@@ -365,9 +365,58 @@ should ('...')
 ### 8. **Network Requests**
 
 - Intercept and stub requests with `cy.intercept()`:
+- Stub: create a mocked response or replacement for a network request, instead of allowing the application to interact with the real backend
+
   ```js
   cy.intercept("GET", "/api/resource", { fixture: "data.json" });
   ```
+
+#### 8.1 Intercept
+
+- Used to intercept and control network requests made by the application under test
+- Allows us to:
+  - Stub responses
+  - Monitor requests
+  - Make assertions on them
+- Testing how the application handles network interactions without relying on the actual backend
+
+- It can:
+  - 1. Intercept requests: It intercepts HTTP requests and route them through custom logic or returns a stubbed response
+  - 2. Stub responses: Replaces the real response from the server with static data, fixtures or inline objects to test specific scenarios
+  - 3. Spying on requests: Monitors requests to check their structure, headers, or payload without modifying the response
+
+```js
+cy.intercept(method, url, response?)
+```
+
+##### Examples
+
+1. Stubbing a GET request with static data: Intercepts a GET request to the `api/resource` and returns data from a fixture file
+   - It will return the content of `data.json` instead of the actual server response
+
+```js
+cy.intercept("GET", "/api/resource", { fixture: "data.json" });
+```
+
+2. Modifying a response inline: Stub a response directly by providing a JS objectv
+
+```js
+cy.intercept("GET", "/api/resource", {
+  statusCode: 200,
+  body: { id: 1, name: "Test resource" },
+});
+```
+
+3. Spying on a request: Intercepts a request to `api/resource`, but lets the real request go through.
+
+```js
+cy.intercept("GET", "/api/resource").as("getResource");
+cy.get("button").click();
+cy.wait("@getResource").then((interception) => {
+  expect(interception.response.statusCode).to.eq(200);
+  expect(interception.response.body).to.have.property("id");
+});
+```
 
 ---
 
