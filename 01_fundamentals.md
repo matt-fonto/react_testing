@@ -35,10 +35,14 @@
 11. CLI Commands
 12. Best practices
     - 12.1 Avoid variables
-    - 12.2 Use Test IDs for selectors
+    - 12.2 Use stable selectors -- use Test IDs for selectors
     - 12.3 Avoid hardcoding URLS
     - 12.4 Create custom commands
     - 12.5 Avoid .then nesting
+    - 12.6 Test unhappy path
+    - 12.7 Do not test external sites
+    - 12.8 Keep tests independent
+    - 12.9 Do not worry about writing tiny tests
 13. Multi-page testing
 14. Useful methods
 15. Component testing
@@ -497,8 +501,9 @@ npx cypress run --config baseUrl=http://localhost:3000,viewportWidth=1280 # Runs
   });
   ```
 
-#### 12.2 **Use Test IDs for Selectors**
+#### 12.2 **Use stable selectors -- use Test IDs for selectors**
 
+- Don't couple the implementation (JS, CSS) to the tests. Use data-testid
 - Use `[data-testid]` attributes for element selectors:
   ```html
   <div data-testid="example" />
@@ -540,6 +545,28 @@ npx cypress run --config baseUrl=http://localhost:3000,viewportWidth=1280 # Runs
   // ✅ Use chaining
   cy.get("button").click();
   ```
+
+#### 12.6 **Test unhappy paths**
+
+- Make sure to test users that might be maliciously using the app or actions that aren't common. Don't just test the 'happy path'
+- Try to break the feature you just added
+
+#### 12.7 **Do not test external sites**
+
+- Only test websites you control.
+- Try avoid visiting or requiring a 3rd party server
+- If you choose, you may use `cy.request()` to talk to 3rd party servers via their API
+- Use `cy.session()` to cache results -- avoiding repeated visiting.
+
+#### 12.8 **Keep tests independent**
+
+- Don't make one test dependent on another. It becomes very hard to manage
+- Your tests shouldn't have side-effects into any other tests
+
+#### 12.9 **Do not worry about writing tiny tests**
+
+- Writing E2E tests that are tiny is non-performant and excessive
+- Small tests in Cypress hurt performance
 
 ### 13. **Multi-page testing**
 
@@ -585,7 +612,7 @@ export const Button = ({ label, onClick }) => (
 ```
 
 ```js
-// Button.cy.js
+// Button.cy.tsx
 describe("button component", () => {
   it("renders with the correct label", () => {
     cy.mount(<Button label="Click me" />);
@@ -593,5 +620,3 @@ describe("button component", () => {
   });
 });
 ```
-
-<!-- video 2:21:08 -->
