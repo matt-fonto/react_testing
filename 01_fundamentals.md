@@ -15,6 +15,7 @@
    - 4.7 beforeEach
    - 4.8 Custom Commands
    - 4.9 Cypress aliases
+   - 4.10 Attribute selectors
 5. Assertions with 'should'
    - 5.1 Most common assertions
    - 5.2 More detailed list
@@ -245,6 +246,36 @@ Other possiibilities:
 - Drag and drop
 - File upload
 - Logout
+
+#### 4.10 **Attribute selectors**
+
+1. `=`: exact
+2. `^=`: starts with
+3. `$=`: ends with
+4. `*=`: contains substring
+5. `|=`: used for language codes
+6. `~=`: white-space separated list of values
+
+```js
+// 1. [attribute = value]: selects EXACT
+
+cy.get('[type="submit"]');
+
+// 2. [attribute^=value]: selects elements whose attribute value STARTS WITH specified value
+cy.get('[id^="user"]');
+
+// 3. [attribute$=value]: selects element whose attribute value ENDS WITH specified value
+cy.get('[class$="active"]');
+
+// 4. [attribute*=value]: selects element whose attribute value CONTAINS specified substring
+cy.get('[class*="active"]');
+
+// 5. [attribute|=value]: selects element whose attribute value is EITHER EXACTLY "value" or starts with "value-" (used mostly for language codes)
+cy.get('[lang|="en"]');
+
+// 6. [attribute~=value]: selects element with a whitespace-separated list of values, where one of the values matches exactly
+cy.get('[class~="btn-primary"]');
+```
 
 ---
 
@@ -536,6 +567,7 @@ cy.wrap({ firstName: "Mateus", lastName: "Fontoura" })
 
 - Allows us to test individual UI components in isolation
 - Component testing is added to `cypress/component`
+- Cypress uses the same test runner, commands, and API to test components as it does to pages. The only difference, thought, is that it uses a development server instead of rendering a complete website, which results in faster tests and fewers deps
 
 ```
 npx cypress open --component
@@ -555,6 +587,11 @@ export const Button = ({ label, onClick }) => (
 ```js
 // Button.cy.js
 describe("button component", () => {
-  //
+  it("renders with the correct label", () => {
+    cy.mount(<Button label="Click me" />);
+    cy.getDataId("custom-button").should("contain", "Click me");
+  });
 });
 ```
+
+<!-- video 2:21:08 -->
